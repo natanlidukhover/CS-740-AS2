@@ -119,11 +119,11 @@ void empty_queue(struct Queue* q) {
         long int current_latency = stop.tv_nsec - n->start_ns;
         if (current_latency < min && current_latency > 0) {
             min = current_latency;
-            printf("New minimum latency in nanoseconds: %lf\n", (float) min / 2.0);
+            printf("New minimum latency in nanoseconds: %lf\n", (float) min);
         }
         if (current_latency > max && current_latency > 0) {
             max = current_latency;
-            printf("New maximum latency in nanoseconds: %lf\n", (float) max / 2.0);
+            printf("New maximum latency in nanoseconds: %lf\n", (float) max);
         }
     }
 }
@@ -188,7 +188,7 @@ int main(int argc, char* argv[]) {
                 }
 
                 if (buffer_check[0] == 0) {
-                    printf("Received low latency transmission from %s:%d\n", inet_ntoa(new_address.sin_addr), ntohs(new_address.sin_port));
+                    //printf("Received low latency transmission from %s:%d\n", inet_ntoa(new_address.sin_addr), ntohs(new_address.sin_port));
                     
                     if (send(new_socket, buffer_check, BUFFER_SIZE_CHECK, 0) < 0) {
                         printf("Sending check confirmation failed\n");
@@ -208,7 +208,7 @@ int main(int argc, char* argv[]) {
                     bzero(buffer_check, BUFFER_SIZE_CHECK);
                     bzero(buffer_low, BUFFER_SIZE_LOW);
                 } else if (buffer_check[0] == 1) {
-                    printf("Received high throughput transmission from %s:%d\n", inet_ntoa(new_address.sin_addr), ntohs(new_address.sin_port));
+                    //printf("Received high throughput transmission from %s:%d\n", inet_ntoa(new_address.sin_addr), ntohs(new_address.sin_port));
 
                     if (send(new_socket, buffer_check, BUFFER_SIZE_CHECK, 0) < 0) {
                         printf("Sending check confirmation failed\n");

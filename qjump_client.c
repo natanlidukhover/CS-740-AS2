@@ -51,10 +51,6 @@ int main(int argc, char *argv[]) {
             memset(buffer_check, 0, BUFFER_SIZE_CHECK);
             memset(buffer_low, 0, BUFFER_SIZE_LOW);
 
-            if (clock_gettime(CLOCK_REALTIME, &start) == -1) {
-                perror("Starting the clock failed");
-            }
-
             if (send(client_socket, buffer_check, BUFFER_SIZE_CHECK, 0) < 0) {
                 printf("Sending check data failed\n");
             }
@@ -67,27 +63,9 @@ int main(int argc, char *argv[]) {
             if (recv(client_socket, buffer_low, BUFFER_SIZE_LOW, 0) < 0) {
                 printf("Receiving low latency confirmation failed\n");
             }
-
-            if (clock_gettime(CLOCK_REALTIME, &stop) == -1) {
-                perror("Stopping the clock failed");
-            }
-
-            long int current_latency = stop.tv_nsec - start.tv_nsec;
-            if (current_latency < min && current_latency > 0) {
-                min = current_latency;
-                printf("New minimum latency in nanoseconds: %lf\n", (float) min / 2.0);
-            }
-            if (current_latency > max && current_latency > 0) {
-                max = current_latency;
-                printf("New maximum latency in nanoseconds: %lf\n", (float) max / 2.0);
-            }
         } else {
             memset(buffer_check, 1, BUFFER_SIZE_CHECK);
             memset(buffer_high, 1, BUFFER_SIZE_HIGH);
-
-            /*if (clock_gettime(CLOCK_REALTIME, &start) == -1) {
-                perror("Starting the clock failed");
-            }*/
 
             if (send(client_socket, buffer_check, BUFFER_SIZE_CHECK, 0) < 0) {
                 printf("Sending check data failed\n");
@@ -101,20 +79,6 @@ int main(int argc, char *argv[]) {
             if (recv(client_socket, buffer_high, BUFFER_SIZE_HIGH, 0) < 0) {
                 printf("Receiving high throughput confirmation failed\n");
             }
-
-            /*if (clock_gettime(CLOCK_REALTIME, &stop) == -1) {
-                perror("Stopping the clock failed");
-            }
-
-            long int current_latency = stop.tv_nsec - start.tv_nsec;
-            if (current_latency < min && current_latency > 0) {
-                min = current_latency;
-                printf("New minimum latency in nanoseconds: %lf\n", (float) min / 2.0);
-            }
-            if (current_latency > max && current_latency > 0) {
-                max = current_latency;
-                printf("New maximum latency in nanoseconds: %lf\n", (float) max / 2.0);
-            }*/
         }
     }
 
